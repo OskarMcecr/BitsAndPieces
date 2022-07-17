@@ -6,7 +6,7 @@ public class InterPlay : MonoBehaviour
     private Renderer _renderer;
     private Ray _ray;
     private RaycastHit _hit;
-    public int Pause = 1;
+    public InterPause pState;
 
     private void Start()
     {
@@ -24,16 +24,10 @@ public class InterPlay : MonoBehaviour
                 if (_hit.transform == transform)
                 {
                     Debug.Log("Play");
-                    Pause = 0;
-                    Camera.main.transform.Rotate(new Vector3(90, 0, 0));
+                    pState.PauseState = 1;
+                    _mainCamera.transform.Rotate(new Vector3(90, 0, 0));
                 }
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && Pause == 0)
-        {
-            Debug.Log("Pause");
-            Pause = 1;
-            Camera.main.transform.Rotate(new Vector3(-90, 0, 0));
         }
     }
 }
