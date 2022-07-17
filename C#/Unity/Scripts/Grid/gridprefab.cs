@@ -25,9 +25,9 @@ public class gridprefab : MonoBehaviour
         (float xOffset, float zOffset) = (Random.Range(-10000f, 10000f), Random.Range(-10000f, 10000f));
         (float xtrOffset, float ztrOffset) = (Random.Range(-10000f, 10000f), Random.Range(-10000f, 10000f));
         (float xteOffset, float zteOffset) = (Random.Range(-10000f, 10000f), Random.Range(-10000f, 10000f));
-        for(int z = 0; z < size; z++) 
+        for(int z = 3; z < size; z++) 
         {
-            for(int x = 0; x < size; x++)
+            for(int x = 3; x < size; x++)
             {
                 float noiseValue = Mathf.PerlinNoise(x * scale + xOffset, z * scale + zOffset);
                 noiseMap[x, z] = noiseValue;
@@ -38,6 +38,16 @@ public class gridprefab : MonoBehaviour
             }
         }
 
+        float[,] falloffMap = new float[size,size];
+        for(int z = 0; z < size; z++){
+            for(int x = 0; x < size; x++){
+                float xv = x/(float)size *2 -1;
+                float zv = z/(float)size *2 -1;
+                float v = Mathf.Max(Mathf.Abs(xv), Mathf.Abs(zv));
+                falloffMap[x, z] = Mathf.Pow(v, 3f) / (Mathf.Pow(v, 3f) + Mathf.Pow(2.2f - 2.2f * v, 3f));
+        }
+        }
+
         grid = new Cell[size, size];
         for(int z = 0; z < size; z++)
          {
@@ -45,6 +55,7 @@ public class gridprefab : MonoBehaviour
             {
                 float bHeight = height;
                 float noiseValue = noiseMap[x, z];
+                noiseValue -= falloffMap[x, z];
                 float noiseValueTree = noiseMapTree[x, z];
                 float noiseValueTerrain = noiseMapTerrain[x, z];
                 bool isBaseLevel = noiseValue < baseLevel;
