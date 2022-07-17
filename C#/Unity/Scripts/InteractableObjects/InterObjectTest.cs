@@ -1,17 +1,17 @@
 using UnityEngine;
-
 public class InterObjectTest : MonoBehaviour
 {
     private Camera _mainCamera;
     private Renderer _renderer;
     private Ray _ray;
     private RaycastHit _hit;
+    public InterPause pState;
 
     private void Start()
     {
         _mainCamera = Camera.main;
         _renderer = GetComponent<Renderer>();
-    }
+    } 
 
     private void Update()
     {
@@ -24,10 +24,16 @@ public class InterObjectTest : MonoBehaviour
                 if (_hit.transform == transform)
                 {
                     Debug.Log("Click");
-                    _renderer.material.color =
-                        _renderer.material.color == Color.red ? Color.blue : Color.red;
+                    pState.PauseState = 2;
+                    SwitchBoards();
                 }
             }
         }
+    }
+
+    private void SwitchBoards()
+    {
+        _mainCamera.transform.position = new Vector3(-8.5f,12f,8.5f+200.0f);
+        _mainCamera.transform.Rotate(new Vector3(90, 0, 0));
     }
 }
